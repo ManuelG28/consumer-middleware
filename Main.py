@@ -36,7 +36,7 @@ def home():
 
 
 def crud_queue(consumer):
-    
+
     while(True):
 
         print("----------------Welcome",
@@ -49,7 +49,7 @@ def crud_queue(consumer):
             consumer.get_queues()
 
         elif option == '2':
-            queue_name = input("Please enter the queue name that you want to get all of messages: ")
+            queue_name = input("Please enter the queue name where you want to get all the of messages: ")
             consumer.get_message(queue_name)
 
         elif option == "3":
