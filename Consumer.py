@@ -1,7 +1,7 @@
 import requests
 
 class Consumer:
-    def __init__(self, email, password):
+    def __init__(self, email, password, name=''):
         self.__email = email
         self.__name = ''
         self.__password = password
@@ -52,14 +52,55 @@ class Consumer:
             'name': self.get_email()
         }).json()
 
-        return response
+        if 'message' in response:
+            for error in response['errors']:
+                print(error)
+
+        else:
+            return response
 
     def login(self):
         response = requests.post("http://127.0.0.1:8000/api/login", {
             'email': self.get_email(),
             'password': self.get_password(),
         }).json()
-        
-        self.set_acces_token(response["access_token"])
-        return response
+
+        if 'message' in response:
+            return response["message"]
+
+        else:
+            self.set_acces_token(response["access_token"])
+            return response
+
+    def update_user_info(self):
+        head = {'Authorization': 'Bearer ' + self.get_access_token()}
+        response = requests.get("http://127.0.0.1:8000/api/user-info",headers = head).json()
+        self.set_name(response["name"])
     
+    def get_message(self,queue_name):
+        head = {'Authorization': 'Bearer ' + self.get_access_token()}
+        params = {"queue":queue_name}
+        response = requests.get("http://127.0.0.1:8000/api/queue/pull", params = params, headers = head).json()
+
+        if "errors" in response:
+            print(response["errors"])
+
+        elif not response["messages"]:
+            print("This queue <",queue_name,"> has not messages yet",'\n')
+        else:
+            message = response["messages"]
+            print("Message: ", message[0]["body"])
+            print("Date sent: ", message[0]["date"])
+    
+    def get_queues(self):
+        head = {'Authorization': 'Bearer ' + self.get_access_token()}
+        response = requests.get("http://127.0.0.1:8000/api/queue/list", headers = head).json()
+        if not response:
+            print("This server has not queues yet")
+
+        else:
+            for queue in response[0]:
+                print("Queue name:",queue["name"])
+                print("Created at:",queue["created_at"],'\n')
+
+
