@@ -46,7 +46,7 @@ class Consumer:
         self.__name = name
 
     def sign_in(self):
-        response = requests.post("http://127.0.0.1:8000/api/register", {
+        response = requests.post("http://54.164.144.28/api/register", {
             'email': self.get_email(),
             'password': self.get_password(),
             'name': self.get_email()
@@ -60,7 +60,7 @@ class Consumer:
             return response
 
     def login(self):
-        response = requests.post("http://127.0.0.1:8000/api/login", {
+        response = requests.post("http://54.164.144.28/api/login", {
             'email': self.get_email(),
             'password': self.get_password(),
         }).json()
@@ -74,13 +74,13 @@ class Consumer:
 
     def update_user_info(self):
         head = {'Authorization': 'Bearer ' + self.get_access_token()}
-        response = requests.get("http://127.0.0.1:8000/api/user-info",headers = head).json()
+        response = requests.get("http://54.164.144.28/api/user-info",headers = head).json()
         self.set_name(response["name"])
     
     def get_message(self,queue_name):
         head = {'Authorization': 'Bearer ' + self.get_access_token()}
         params = {"queue":queue_name}
-        response = requests.get("http://127.0.0.1:8000/api/queue/pull", params = params, headers = head).json()
+        response = requests.get("http://54.164.144.28/api/queue/pull", params = params, headers = head).json()
 
         if "errors" in response:
             print(response["errors"])
@@ -94,7 +94,7 @@ class Consumer:
     
     def get_queues(self):
         head = {'Authorization': 'Bearer ' + self.get_access_token()}
-        response = requests.get("http://127.0.0.1:8000/api/queue/list", headers = head).json()
+        response = requests.get("http://54.164.144.28/api/queue/list", headers = head).json()
         if not response:
             print("This server has not queues yet")
 
