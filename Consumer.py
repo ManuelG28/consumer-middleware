@@ -49,7 +49,7 @@ class Consumer:
         response = requests.post("http://54.164.144.28/api/register", {
             'email': self.get_email(),
             'password': self.get_password(),
-            'name': self.get_email()
+            'name': self.get_name()
         }).json()
 
         if 'message' in response:
