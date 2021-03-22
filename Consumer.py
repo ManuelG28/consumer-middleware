@@ -3,7 +3,7 @@ import requests
 class Consumer:
     def __init__(self, email, password, name=''):
         self.__email = email
-        self.__name = ''
+        self.__name = name
         self.__password = password
         self.__ip = ''
         self.__access_token = ''
